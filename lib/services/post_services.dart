@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:html';
 
 import 'package:api/models/post.dart';
 import 'package:api/utils/endpoint.dart';
@@ -82,4 +81,8 @@ class PostServices {
       headers: ReequestHelper.basicHeader(),
     );
   }
+
+  fetchAlbums(int id) {}
+
+  fetchPhotos(int id) {}
 }

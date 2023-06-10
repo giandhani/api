@@ -8,17 +8,17 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Consume API vdkdz',
+      debugShowCheckedModeBanner: false,
+      title: 'ITG Consume API',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      routeInformationParser: AppRoutes.goRouter.routeInformationParser,
-      routeInformationProvider: AppRoutes.goRouter.routeInformationProvider,
-      routerDelegate: AppRoutes.goRouter.routerDelegate,
+      routeInformationParser: Approutes.goRouter.routeInformationParser,
+      routeInformationProvider: Approutes.goRouter.routeInformationProvider,
+      routerDelegate: Approutes.goRouter.routerDelegate,
     );
   }
 }

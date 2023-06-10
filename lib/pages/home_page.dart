@@ -1,6 +1,8 @@
 import 'package:api/cotrollers/post_controller.dart';
 import 'package:api/models/post.dart';
+import 'package:api/utils/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,17 +32,48 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
                   child: ListView.separated(
                     itemBuilder: (context, index) {
-                      return Card(
-                        child: ListTile(
-                          title: Text(
-                            snapshot.data![index].title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          subtitle: Text(
-                            snapshot.data![index].body,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
+                      return Dismissible(
+                        key: Key(snapshot.data![index].id.toString()),
+                        onDismissed: (direction) {
+                          postController
+                              .delete(snapshot.data![index].id)
+                              .then((result) {
+                            if (result) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Post Deleted"),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Failed Post Deleted"),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                              setState(() {});
+                            }
+                          });
+                        },
+                        child: Card(
+                          child: ListTile(
+                            onTap: () {
+                              GoRouter.of(context).pushNamed(
+                                Approutes.post,
+                                extra: snapshot.data![index],
+                              );
+                            },
+                            title: Text(
+                              snapshot.data![index].title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            subtitle: Text(
+                              snapshot.data![index].body,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ),
                       );
@@ -54,13 +87,19 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               } else {
-                return Text("Tidak Ada data");
+                return const Text("Tidak Ada data");
               }
             } else {
-              return Text("error");
+              return const Text("error");
             }
           },
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Approutes.goRouter.pushNamed(Approutes.addPost);
+        },
+        label: const Text("Tambah Berita"),
       ),
     );
   }
